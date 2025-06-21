@@ -1,8 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import shopeeLogo from '../../assets/ShopeeLogo.png'
-import { SiShopee } from "react-icons/si";
+import { SiShopee } from "react-icons/si"
 
 const Login = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    try {
+      // Replace with your backend API endpoint
+      const response = await fetch('https://your-backend-api.com/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        console.log("Login success", data)
+        localStorage.setItem('token', data.token)
+        window.location.href = '/dashboard' 
+      } else {
+        setError(data.message || 'Đăng nhập thất bại.')
+      }
+    } catch (err) {
+      setError('Lỗi kết nối đến máy chủ.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className='w-full h-screen flex flex-col'>
       {/* Header */}
@@ -13,6 +47,7 @@ const Login = () => {
         </div>
         <a href='#' className='text-main-orange font-medium'>Bạn cần giúp đỡ?</a>
       </div>
+
       {/* Body */}
       <div className='flex-1 bg-main-orange flex gap-12 items-center justify-center'>
         <div className='w-1/2 flex flex-col justify-center items-center h-full text-white gap-12'>
@@ -24,15 +59,49 @@ const Login = () => {
             Nền tảng thương mại điện tử yêu thích ở Đông Nam Á và Đài Loan
           </span>
         </div>
+
         {/* Login Form */}
-        <form className='flex flex-col bg-white h-fit rounded-md py-8 px-8 gap-8'>
+        <form
+          onSubmit={handleLogin}
+          className='flex flex-col bg-white h-fit rounded-md py-8 px-8 gap-8'
+        >
           <h3 className='text-[1.5rem]'>Đăng nhập</h3>
-          <input type='text' className='border py-2 px-2 w-[26rem] border-gray-400 focus:outline-none' />
-          <input type='password' className='border py-2 px-2 w-[26rem] border-gray-400 focus:outline-none' />
-          <button className='bg-main-orange text-white font-medium py-3'>ĐĂNG NHẬP</button>
-          <a href='#' className='text-blue-800'>Quên mật khẩu?</a>
+
+          <input
+            type='text'
+            placeholder='Tên đăng nhập'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className='border py-2 px-2 w-[26rem] border-gray-400 focus:outline-none'
+            required
+          />
+
+          <input
+            type='password'
+            placeholder='Mật khẩu'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className='border py-2 px-2 w-[26rem] border-gray-400 focus:outline-none'
+            required
+          />
+
+          {error && (
+            <span className='text-red-500 text-sm'>{error}</span>
+          )}
+
+          <button
+            type='submit'
+            disabled={loading}
+            className='bg-main-orange text-white font-medium py-3 disabled:opacity-50
+            hover:bg-orange-hover'
+          >
+            {loading ? 'Đang xử lý...' : 'ĐĂNG NHẬP'}
+          </button>
+
+          <a href='/forgot-pasword' className='text-blue-800'>Quên mật khẩu?</a>
+
           <span className='text-center text-gray-500 '>
-            Bạn mới biết đến Shopee? <a href='#' className='text-main-orange font-medium'>
+            Bạn mới biết đến Shopee? <a href='register' className='text-main-orange font-medium'>
               Đăng ký
             </a>
           </span>

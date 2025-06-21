@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       colors: {
         "main-orange": '#EE4D2D',
+        "orange-hover": "#f25f2e"
       },
       fontFamily: {
         'roboto': "Roboto",
