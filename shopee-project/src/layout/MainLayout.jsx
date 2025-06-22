@@ -7,7 +7,7 @@ import Footer from './Footer'
 const MainLayout = () => {
   
   return (
-    <div className='w-full h-screen'>
+    <div className='w-full bg-[#f5f5f5]'>
       <Header/>
       <div>
         <Outlet />
