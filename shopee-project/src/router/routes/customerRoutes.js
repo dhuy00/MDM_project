@@ -1,11 +1,17 @@
-import Home from "../../pages/customer/Home"
+import Home from "../../pages/customer/Home";
+import Product from "./../../pages/product/Product";
 
 const customerRoutes = [
   {
-    path: '/home',
-    element: <Home/>,
-    role: "customer"
+    path: "/",
+    element: <Home />,
+    role: "customer",
   },
-]
+  {
+    path: "/product/:id",
+    element: <Product />,
+    role: "customer",
+  },
+];
 
-export default customerRoutes
+export default customerRoutes;

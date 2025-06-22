@@ -1,8 +1,7 @@
 import { Children } from "react";
 import MainLayout from "../../layout/MainLayout.jsx";
 import allRoutes from "./allRoutes";
-import React from 'react';
-
+import React from "react";
 
 const getRoutes = () => {
   // privateRoutes.map(route => {
@@ -10,12 +9,11 @@ const getRoutes = () => {
   //    route.element = <ProtectedRoute route={route}>{route.element}</ProtectedRoute>
   // })
 
-
   return {
-    path: '/',
-    element: <MainLayout/>,
+    path: "/",
+    element: <MainLayout />,
     children: allRoutes,
-  }
-}
+  };
+};
 
-export default getRoutes
+export default getRoutes;
