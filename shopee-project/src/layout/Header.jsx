@@ -1,7 +1,7 @@
 import React from "react";
 import { FaBell } from "react-icons/fa";
 import { IoMdArrowDropdown } from "react-icons/io";
-import logo from "../assets/ShopeeLogo2.png";
+import logo from "../assets/ShopeeLogo.png";
 import avatar from "../assets/LogoCoolmate.png";
 
 const Header = () => {
@@ -9,12 +9,8 @@ const Header = () => {
     <header className="bg-white shadow-sm border-b px-6 py-3 flex justify-between items-center">
       {/* Logo + Tên trung tâm */}
       <div className="flex items-center gap-3">
-        <img
-          src={logo}
-          alt="Shop Logo"
-          className="w-8 h-8"
-        />
-        <h1 className="text-orange-500 font-bold text-lg">Kênh Người Bán</h1>
+        <img src={logo} alt="Shop Logo" className="h-8 w-auto object-contain" />
+        <h1 className="text-gray-600 font-bold text-lg">Kênh Người Bán</h1>
       </div>
 
       {/* Khu vực người dùng */}
