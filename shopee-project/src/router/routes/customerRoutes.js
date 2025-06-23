@@ -2,6 +2,7 @@ import Home from "../../pages/customer/Home"
 import Cart from "../../pages/customer/Cart"
 import Order from "../../pages/customer/Order"
 import Review from "../../pages/customer/Review"
+import OrderDetail from "../../pages/customer/OrderDetail"
 
 const customerRoutes = [
   {
@@ -17,6 +18,11 @@ const customerRoutes = [
   {
     path: '/order',
     element: <Order/>,
+    role: "customer"
+  },
+  {
+    path: '/order/:id',
+    element: <OrderDetail/>,
     role: "customer"
   },
   {
