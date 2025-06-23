@@ -4,16 +4,15 @@ import Header from './Header'
 import Footer from './Footer'
 
 const MainLayout = () => {
-  
   return (
-    <div className=' w-full h-screen'>
-      <Header/>
-      <div>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
         <Outlet />
-      </div>
-      <Footer/>
+      </main>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
 export default MainLayout

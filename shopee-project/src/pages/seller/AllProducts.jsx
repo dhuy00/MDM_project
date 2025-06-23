@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AllProducts = () => {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/products")
+      .then(res => res.json())
+      .then(data => setProducts(data))
+      .catch(error => console.error("Fetch error:", error));
+  }, []);
 
   return (
     <div className="bg-white p-6 rounded shadow">
@@ -98,9 +106,26 @@ const AllProducts = () => {
           </tr>
         </thead>
         <tbody>
-          <tr className="text-center text-gray-500">
-            <td colSpan="8" className="py-4">Chưa có sản phẩm nào</td>
-          </tr>
+          {products.length === 0 ? (
+            <tr className="text-center text-gray-500">
+              <td colSpan="8" className="py-80">
+                Chưa có sản phẩm nào
+              </td>
+            </tr>
+          ) : (
+            products.map(product => (
+              <tr key={product._id}>
+                <td className="border p-2">{product.name}</td>
+                <td className="border p-2">SKU</td>
+                <td className="border p-2">{product.category}</td>
+                <td className="border p-2">₫{product.price}</td>
+                <td className="border p-2">{product.stock}</td>
+                <td className="border p-2">0</td>
+                <td className="border p-2">-</td>
+                <td className="border p-2">Xoá / Sửa</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
