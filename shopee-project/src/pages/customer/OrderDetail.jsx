@@ -4,11 +4,9 @@ import { FaRegBell, FaRegUser, FaStore } from 'react-icons/fa'
 import { MdOutlineLocalOffer } from 'react-icons/md'
 import { BsCoin } from 'react-icons/bs'
 import { IoChevronBack } from "react-icons/io5";
-import { FaReceipt } from "react-icons/fa";
-import { FaMoneyBill } from "react-icons/fa";
-import { MdLocalShipping } from "react-icons/md";
-import { LuRadioReceiver } from "react-icons/lu";
-import { FaRegStar } from "react-icons/fa";
+import TimeLine from '../../components/order/TimeLine'
+import DeliveryTimeline from '../../components/order/DeliveryTimeline'
+import Summary from '../../components/order/Summary'
 
 const OrderDetail = () => {
   return (
@@ -47,23 +45,37 @@ const OrderDetail = () => {
         </div>
 
         {/* Main content */}
-        <div className='w-full'>
-          <div className='flex justify-between items-center'>
+        <div className='w-full flex items-center flex-col mt-4 gap-[2px]'>
+          {/* Header */}
+          <div className='flex justify-between w-full items-center bg-white py-3 px-4 text-sm 
+          font-medium text-gray-500'>
             <span className='flex gap-2 items-center'>
-              <IoChevronBack /> 
+              <IoChevronBack />
               <span>TRỞ LẠI</span>
             </span>
-            <div>
+            <div className='flex gap-2'>
               <span>MÃ ĐƠN HÀNG. 250303MECW1Q3G</span>
               <span>|</span>
-              <span>ĐƠN HÀNG ĐÃ HOÀN THÀNH</span>
+              <span className='text-main-orange'>ĐƠN HÀNG ĐÃ HOÀN THÀNH</span>
             </div>
           </div>
-          <div>
-            <span className='w-12 h-12 bg-green-500 rounded-full'>
-
-            </span>
+          {/* Timeline */}
+          <TimeLine />
+          {/* Purchase Again */}
+          <div className='flex justify-between items-center bg-orange-50 w-full py-4 px-4'>
+            <span className='text-sm'>Cảm ơn bạn đã mua sắm tại Shopee</span>
+            <button className='bg-main-orange px-20 py-[8px] rounded-sm text-white'>
+              Mua lại
+            </button>
           </div>
+          {/* Contact Seller */}
+          <div className='flex justify-end items-center bg-orange-50 w-full py-4 px-4'>
+            <button className=' w-[212px] py-[8px] rounded-sm bg-white border'>
+              Liên Hệ Người Bán
+            </button>
+          </div>
+          <DeliveryTimeline/>
+          <Summary/>
         </div>
       </div>
     </div>
