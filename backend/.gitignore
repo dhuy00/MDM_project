@@ -1,0 +1,42 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+
+# Build output
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Optional: if using yarn
+yarn.lock
+
+# Optional: local MongoDB dump
+dump/
+
+# Optional: local SSL keys or certs
+*.pem
+*.key
+*.crt
