@@ -1,0 +1,14 @@
+Terminal 1
+...\MongoDB\Server\8.0\bin>mongod.exe --dbpath D:\QTCSDL\MongoData
+
+Terminal
+...\MDM_project-An_post_product\backend>node index.js
+
+VS code
+...\MDM_project-An_post_product\shopee-project> npm start
+
+Trang tất cả sản phẩm
+http://localhost:3000/seller/products
+
+Trang đăng bán 
+http://localhost:3000/seller/post-product
