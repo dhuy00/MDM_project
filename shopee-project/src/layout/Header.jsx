@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   FaShoppingCart,
@@ -6,10 +6,36 @@ import {
   FaQuestionCircle,
   FaSearch,
   FaUser,
+  FaSignOutAlt,
+  FaClipboardList,
+  FaChevronDown,
 } from "react-icons/fa";
 import ShopeeIcon from "../assets/icon";
+import { useAuth } from "../context/AuthContext";
 
 const Header = () => {
+  const { currentUser, logout } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    setShowUserMenu(false);
+  };
+
   return (
     <header className="w-full">
       {/* Top header - light background */}
@@ -51,13 +77,46 @@ const Header = () => {
             </div>
             <div className="flex items-center">
               <FaUser className="mr-1" />
-              <Link to="/login" className="hover:opacity-80">
-                Login
-              </Link>
-              <span className="mx-1">|</span>
-              <Link to="/signup" className="hover:opacity-80">
-                Sign Up
-              </Link>
+              {currentUser ? (
+                <div className="relative" ref={menuRef}>
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center hover:opacity-80"
+                  >
+                    <span className="mr-1">Hello, {currentUser.username}</span>
+                    <FaChevronDown className="text-xs" />
+                  </button>
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                      <Link
+                        to="/orders"
+                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setShowUserMenu(false)}
+                      >
+                        <FaClipboardList className="mr-2" />
+                        Đơn hàng của tôi
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FaSignOutAlt className="mr-2" />
+                        Đăng xuất
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Link to="/login" className="hover:opacity-80">
+                    Login
+                  </Link>
+                  <span className="mx-1">|</span>
+                  <Link to="/register" className="hover:opacity-80">
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
