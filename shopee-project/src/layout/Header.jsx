@@ -12,6 +12,18 @@ import {
 } from "react-icons/fa";
 import ShopeeIcon from "../assets/icon";
 import { useAuth } from "../context/AuthContext";
+import React from 'react'
+import { FaFacebook, FaInstagramSquare, FaUserCircle } from "react-icons/fa"
+import { IoMdNotificationsOutline } from "react-icons/io"
+import { GoQuestion } from "react-icons/go"
+import { RiGlobalLine } from "react-icons/ri"
+
+const HeaderItem = ({ icon: Icon, label }) => (
+  <div className="flex gap-1 items-center cursor-pointer hover:opacity-80">
+    {Icon && <Icon />}
+    <span>{label}</span>
+  </div>
+)
 
 const Header = () => {
   const { currentUser, logout } = useAuth();

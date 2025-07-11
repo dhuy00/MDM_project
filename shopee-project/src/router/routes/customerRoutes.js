@@ -6,6 +6,9 @@ import CartPage from "../../pages/cart/CartPage";
 import Login from "../../pages/auth/Login";
 import Register from "../../pages/auth/Register";
 import ProtectedRoute from "../ProtectedRoute";
+import Cart from "../../pages/customer/Cart";
+import Order from "../../pages/customer/Order";
+import Review from "../../pages/customer/Review";
 
 const customerRoutes = [
   {
@@ -54,6 +57,42 @@ const customerRoutes = [
     path: "/register",
     element: <Register />,
     role: "public",
+  },
+  {
+    path: "/cart-simple",
+    element: (
+      <ProtectedRoute>
+        <Cart />
+      </ProtectedRoute>
+    ),
+    role: "protected",
+  },
+  {
+    path: "/order-simple",
+    element: (
+      <ProtectedRoute>
+        <Order />
+      </ProtectedRoute>
+    ),
+    role: "protected",
+  },
+  {
+    path: "/order-simple/:id",
+    element: (
+      <ProtectedRoute>
+        <OrderDetail />
+      </ProtectedRoute>
+    ),
+    role: "protected",
+  },
+  {
+    path: "/review",
+    element: (
+      <ProtectedRoute>
+        <Review />
+      </ProtectedRoute>
+    ),
+    role: "protected",
   },
 ];
 

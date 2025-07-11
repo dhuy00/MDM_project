@@ -1,122 +1,117 @@
-import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { FaUser, FaLock, FaSpinner } from "react-icons/fa";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import shopeeLogo from '../../assets/ShopeeLogo.png';
+import { SiShopee } from "react-icons/si";
+import { toast } from 'react-toastify';
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (!username || !password) {
-      setError("Vui lòng điền đầy đủ thông tin");
-      return;
-    }
-
     setLoading(true);
-    setError("");
+    setError(null);
 
     try {
-      const result = await login(username, password);
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: username, password })  
+      });
 
-      if (result.success) {
-        // Chuyển hướng đến trang chính
-        navigate("/");
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('Đăng nhập thành công!');
+        localStorage.setItem('token', data.token);
+        setTimeout(() => {
+          navigate('/home');  
+        }, 1500);
       } else {
-        setError(result.message);
+        toast.error(data.message || 'Đăng nhập thất bại.');
+        setError(data.message || 'Đăng nhập thất bại.');
       }
-    } catch (error) {
-      setError("Có lỗi xảy ra khi đăng nhập");
-      console.error("Login error:", error);
+    } catch (err) {
+      toast.error('Lỗi kết nối đến máy chủ.');
+      setError('Lỗi kết nối đến máy chủ.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-[#f53d2d]">Đăng nhập</h2>
-          <p className="text-gray-500 mt-2">Chào mừng bạn trở lại với Shopee</p>
+    <div className='w-full h-screen flex flex-col'>
+      {/* Header */}
+      <div className='flex justify-between px-48 py-4 items-center'>
+        <div className='flex gap-4 items-end'>
+          <img src={shopeeLogo} alt='img-logo' className='w-40 object-cover' />
+          <span className='text-[1.75rem] font-normal'>Đăng nhập</span>
+        </div>
+        <a href='#' className='text-main-orange font-medium'>Bạn cần giúp đỡ?</a>
+      </div>
+
+      {/* Body */}
+      <div className='flex-1 bg-main-orange flex gap-12 items-center justify-center'>
+        <div className='w-1/2 flex flex-col justify-center items-center h-full text-white gap-12'>
+          <div className='flex flex-col justify-center items-center w-fit'>
+            <SiShopee className='w-48 h-48 text-white' />
+            <span className='text-[3rem] font-medium'>Shopee</span>
+          </div>
+          <span className='block max-w-[370px] font-medium text-[1.5rem] text-center'>
+            Nền tảng thương mại điện tử yêu thích ở Đông Nam Á và Đài Loan
+          </span>
         </div>
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
-          </div>
-        )}
+        {/* Login Form */}
+        <form
+          onSubmit={handleLogin}
+          className='flex flex-col bg-white h-fit rounded-md py-8 px-8 gap-8'
+        >
+          <h3 className='text-[1.5rem]'>Đăng nhập</h3>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 mb-2" htmlFor="username">
-              Tên đăng nhập
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-3 text-gray-400">
-                <FaUser />
-              </span>
-              <input
-                id="username"
-                type="text"
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#f53d2d]"
-                placeholder="Nhập tên đăng nhập"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-          </div>
+          <input
+            type='text'
+            placeholder='Số điện thoại'
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className='border py-2 px-2 w-[26rem] border-gray-400 focus:outline-none'
+            required
+          />
 
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2" htmlFor="password">
-              Mật khẩu
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-3 text-gray-400">
-                <FaLock />
-              </span>
-              <input
-                id="password"
-                type="password"
-                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#f53d2d]"
-                placeholder="Nhập mật khẩu"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-          </div>
+          <input
+            type='password'
+            placeholder='Mật khẩu'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className='border py-2 px-2 w-[26rem] border-gray-400 focus:outline-none'
+            required
+          />
+
+          {error && (
+            <span className='text-red-500 text-sm'>{error}</span>
+          )}
 
           <button
-            type="submit"
+            type='submit'
             disabled={loading}
-            className="w-full bg-[#f53d2d] text-white py-2 px-4 rounded hover:bg-[#f53d2d]/90 focus:outline-none"
+            className='bg-main-orange text-white font-medium py-3 disabled:opacity-50
+            hover:bg-orange-hover'
           >
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <FaSpinner className="animate-spin mr-2" />
-                Đang xử lý...
-              </span>
-            ) : (
-              "Đăng nhập"
-            )}
+            {loading ? 'Đang xử lý...' : 'ĐĂNG NHẬP'}
           </button>
-        </form>
 
-        <div className="mt-6 text-center">
-          <p>
-            Chưa có tài khoản?{" "}
-            <Link to="/register" className="text-[#f53d2d] hover:underline">
-              Đăng ký ngay
-            </Link>
-          </p>
-        </div>
+          <a href='/forgot-password' className='text-blue-800'>Quên mật khẩu?</a>
+
+          <span className='text-center text-gray-500'>
+            Bạn mới biết đến Shopee? <a href='/register' className='text-main-orange font-medium'>
+              Đăng ký
+            </a>
+          </span>
+        </form>
       </div>
     </div>
   );
