@@ -12,7 +12,6 @@ import {
 } from "react-icons/fa";
 import ShopeeIcon from "../assets/icon";
 import { useAuth } from "../context/AuthContext";
-import React from 'react'
 import { FaFacebook, FaInstagramSquare, FaUserCircle } from "react-icons/fa"
 import { IoMdNotificationsOutline } from "react-icons/io"
 import { GoQuestion } from "react-icons/go"

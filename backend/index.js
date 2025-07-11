@@ -1,4 +1,8 @@
 const express = require("express");
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
 // <<<<<<< khoi_fe_home_page_product_page
 // const app = express();
 // =======
