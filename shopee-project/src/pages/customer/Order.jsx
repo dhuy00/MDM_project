@@ -6,8 +6,49 @@ import { BsCoin } from 'react-icons/bs'
 import OrderProduct from '../../components/order/OrderProduct'
 import { productData } from '../../mock/productData'
 import ReviewModal from '../../components/order/ReviewModal'
+import { useState, useEffect } from 'react'
 
 const Order = () => {
+  const [activeTab, setActiveTab] = useState('Tất cả')
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filteredProducts, setFilteredProducts] = useState(productData)
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const tabs = ['Tất cả', 'Chờ thanh toán', 'Vận chuyển', 'Chờ giao hàng', 'Hoàn thành', 'Đã huỷ', 'Trả hàng/Hoàn tiền']
+
+  useEffect(() => {
+    filterProducts()
+  }, [activeTab, searchTerm])
+
+  const handleOpenReviewModal = (product) => {
+    setSelectedProduct(product);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleCloseReviewModal = () => {
+    setIsReviewModalOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const filterProducts = () => {
+    let filtered = [...productData]
+
+    if (activeTab !== 'Tất cả') {
+      filtered = filtered.filter((p) => p.status === activeTab)
+    }
+
+    if (searchTerm.trim()) {
+      filtered = filtered.filter((p) =>
+        p.shopName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.orderId.toString().includes(searchTerm) ||
+        p.productName.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    }
+
+    setFilteredProducts(filtered)
+  }
+
   return (
     <div>
       <Navigation />
@@ -47,8 +88,12 @@ const Order = () => {
         <div className="flex-1 p-6">
           {/* Tabs */}
           <div className="flex gap-6 border-b pb-2 mb-4">
-            {['Tất cả', 'Chờ thanh toán', 'Vận chuyển', 'Chờ giao hàng', 'Hoàn thành', 'Đã huỷ', 'Trả hàng/Hoàn tiền'].map((label, idx) => (
-              <button key={idx} className={`pb-1 ${idx === 0 ? 'text-[#ee4d2d] border-b-2 border-[#ee4d2d]' : 'hover:text-[#ee4d2d]'}`}>
+            {tabs.map((label, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveTab(label)}
+                className={`pb-1 ${activeTab === label ? 'text-[#ee4d2d] border-b-2 border-[#ee4d2d]' : 'hover:text-[#ee4d2d]'}`}
+              >
                 {label}
               </button>
             ))}
@@ -59,15 +104,27 @@ const Order = () => {
             type="text"
             placeholder="Bạn có thể tìm kiếm theo tên Shop, ID đơn hàng hoặc Tên Sản phẩm"
             className="w-full border border-gray-200 p-2 mb-4 rounded outline-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
 
           {/* Order item */}
-          <OrderProduct product={productData} />
-          <OrderProduct product={productData} />
-          <OrderProduct product={productData} />
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((item) => (
+              <OrderProduct
+                key={item.orderId}
+                product={item}
+                onReviewClick={() => handleOpenReviewModal(item)}
+              />
+            ))
+          ) : (
+            <div className="text-center text-gray-500">Không tìm thấy đơn hàng phù hợp</div>
+          )}
         </div>
       </div>
-      <ReviewModal/>
+      {isReviewModalOpen && (
+        <ReviewModal product={selectedProduct} onClose={handleCloseReviewModal} />
+      )}
     </div>
   )
 }

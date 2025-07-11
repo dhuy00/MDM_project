@@ -28,6 +28,8 @@ app.use(cookieParser());
 // Routes
 app.use('/api', require('./routes/authRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+
 
 app.get('/', (req, res) => res.send('My backend'));
 

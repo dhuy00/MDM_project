@@ -1,41 +1,47 @@
-import React, { useState } from 'react'
-import shopeeLogo from '../../assets/ShopeeLogo.png'
-import { SiShopee } from "react-icons/si"
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import shopeeLogo from '../../assets/ShopeeLogo.png';
+import { SiShopee } from "react-icons/si";
+import { toast } from 'react-toastify';
 
 const Login = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
-      // Replace with your backend API endpoint
-      const response = await fetch('https://your-backend-api.com/login', {
+      const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      })
+        body: JSON.stringify({ phone: username, password })  
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
-        console.log("Login success", data)
-        localStorage.setItem('token', data.token)
-        window.location.href = '/dashboard' 
+        toast.success('Đăng nhập thành công!');
+        localStorage.setItem('token', data.token);
+        setTimeout(() => {
+          navigate('/home');  
+        }, 1500);
       } else {
-        setError(data.message || 'Đăng nhập thất bại.')
+        toast.error(data.message || 'Đăng nhập thất bại.');
+        setError(data.message || 'Đăng nhập thất bại.');
       }
     } catch (err) {
-      setError('Lỗi kết nối đến máy chủ.')
+      toast.error('Lỗi kết nối đến máy chủ.');
+      setError('Lỗi kết nối đến máy chủ.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className='w-full h-screen flex flex-col'>
@@ -69,7 +75,7 @@ const Login = () => {
 
           <input
             type='text'
-            placeholder='Tên đăng nhập'
+            placeholder='Số điện thoại'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className='border py-2 px-2 w-[26rem] border-gray-400 focus:outline-none'
@@ -98,17 +104,17 @@ const Login = () => {
             {loading ? 'Đang xử lý...' : 'ĐĂNG NHẬP'}
           </button>
 
-          <a href='/forgot-pasword' className='text-blue-800'>Quên mật khẩu?</a>
+          <a href='/forgot-password' className='text-blue-800'>Quên mật khẩu?</a>
 
-          <span className='text-center text-gray-500 '>
-            Bạn mới biết đến Shopee? <a href='register' className='text-main-orange font-medium'>
+          <span className='text-center text-gray-500'>
+            Bạn mới biết đến Shopee? <a href='/register' className='text-main-orange font-medium'>
               Đăng ký
             </a>
           </span>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

@@ -3,7 +3,7 @@ import React from 'react'
 import { FaTruck } from 'react-icons/fa6'
 import { FaAngleDown } from "react-icons/fa6";
 
-const OrderProduct = ({ product }) => {
+const OrderProduct = ({ product, onReviewClick }) => {
   return (
     <div className="bg-white p-4 mb-4 shadow-sm rounded">
       {/* Header */}
@@ -46,7 +46,7 @@ const OrderProduct = ({ product }) => {
             Thành tiền: <span className="text-[#ee4d2d] text-lg font-semibold">{product.total}</span>
           </div>
           <div className="flex gap-2">
-            <button className="bg-[#ee4d2d] text-white px-8 py-1 rounded">Đánh Giá</button>
+            <button onClick={onReviewClick} className="bg-[#ee4d2d] hover:bg-orange-hover text-white px-8 py-1 rounded">Đánh Giá</button>
             <button className="border px-4 py-1 rounded hover:bg-gray-100">Yêu Cầu Trả Hàng/Hoàn Tiền</button>
             <button className="border px-4 py-1 rounded hover:bg-gray-100 flex items-center gap-1">
               <span>Thêm</span>
