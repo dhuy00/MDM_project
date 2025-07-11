@@ -1,85 +1,95 @@
-import React from 'react'
-import Navigation from '../../components/order/Navigation'
-import { FaRegBell, FaRegUser, FaStore } from 'react-icons/fa'
-import { MdOutlineLocalOffer } from 'react-icons/md'
-import { BsCoin } from 'react-icons/bs'
-import { IoChevronBack } from "react-icons/io5";
-import TimeLine from '../../components/order/TimeLine'
-import DeliveryTimeline from '../../components/order/DeliveryTimeline'
-import Summary from '../../components/order/Summary'
+import React, { useState, useEffect, useCallback } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { FaBox, FaTruck, FaCheckCircle, FaTimesCircle, FaSpinner, FaArrowLeft, FaMapMarkerAlt, FaCreditCard, FaClipboardList, FaUser } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext";
+
+// Bạn có thể import thêm các component như TimeLine, DeliveryTimeline nếu muốn tách UI chi tiết
 
 const OrderDetail = () => {
-  return (
-    <div>
-      <Navigation />
-      <div className="min-h-screen bg-[#f5f5f5] px-32 text-[#333] flex">
-        {/* Sidebar */}
-        <div className="w-[240px] bg-white p-6 border-r">
-          <div className="flex flex-col items-center gap-2 mb-6">
-            <div className="w-16 h-16 bg-gray-200 rounded-full" />
-            <div className="font-semibold">huyvc816</div>
-            <button className="text-blue-500 text-xs">Sửa Hồ Sơ</button>
-          </div>
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <FaRegBell /> Thông Báo
-            </div>
-            <div className="flex items-center gap-2">
-              <FaRegUser /> Tài Khoản Của Tôi
-            </div>
-            <div className="flex items-center gap-2 text-[#f53d2d] font-medium">
-              <FaStore /> Đơn Mua
-            </div>
-            <div className="flex items-center gap-2">
-              <MdOutlineLocalOffer /> Kho Voucher
-            </div>
-            <div className="flex items-center gap-2">
-              <BsCoin /> Shopee Xu
-            </div>
-            <div className="flex items-center gap-2">
-              <img src="https://cf.shopee.vn/file/8f9261bc7256d66fdc92e3980e64c978" alt="sale" className="w-5 h-5" />
-              25.6 Lượng Vé Sale Tới <span className="text-xs text-red-500 font-bold ml-1">New</span>
-            </div>
-          </div>
+  const API_URL = "http://localhost:5000/api";
+
+  const fetchOrderDetail = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_URL}/orders/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setOrder(response.data);
+    } catch (err) {
+      console.error("Error fetching order detail:", err);
+      if (err.response?.status === 404) {
+        setError("Không tìm thấy đơn hàng");
+      } else {
+        setError("Không thể tải chi tiết đơn hàng");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+    fetchOrderDetail();
+  }, [currentUser, navigate, fetchOrderDetail]);
+
+  if (loading) return <div className="text-center py-10">Đang tải...</div>;
+  if (error) return <div className="text-center text-red-500 py-10">{error}</div>;
+  if (!order) return <div className="text-center py-10">Không tìm thấy đơn hàng</div>;
+
+  return (
+    <div className="bg-gray-100 min-h-screen py-6">
+      <div className="max-w-5xl mx-auto bg-white p-6 rounded shadow">
+        <div className="flex items-center mb-4">
+          <Link to="/orders" className="text-[#f53d2d] hover:underline flex items-center">
+            <FaArrowLeft className="mr-2" />
+            Danh sách đơn hàng
+          </Link>
+          <h1 className="ml-6 text-xl font-bold">Đơn hàng #{order.order_id}</h1>
+        </div>
+        <div className="mb-4">
+          <span className="inline-block px-3 py-1 rounded bg-gray-200 text-gray-700">
+            Trạng thái: {order.status}
+          </span>
+          <span className="ml-4 text-sm text-gray-500">Đặt lúc: {order.created_at}</span>
         </div>
 
-        {/* Main content */}
-        <div className='w-full flex items-center flex-col mt-4 gap-[2px]'>
-          {/* Header */}
-          <div className='flex justify-between w-full items-center bg-white py-3 px-4 text-sm 
-          font-medium text-gray-500'>
-            <span className='flex gap-2 items-center'>
-              <IoChevronBack />
-              <span>TRỞ LẠI</span>
-            </span>
-            <div className='flex gap-2'>
-              <span>MÃ ĐƠN HÀNG. 250303MECW1Q3G</span>
-              <span>|</span>
-              <span className='text-main-orange'>ĐƠN HÀNG ĐÃ HOÀN THÀNH</span>
-            </div>
-          </div>
-          {/* Timeline */}
-          <TimeLine />
-          {/* Purchase Again */}
-          <div className='flex justify-between items-center bg-orange-50 w-full py-4 px-4'>
-            <span className='text-sm'>Cảm ơn bạn đã mua sắm tại Shopee</span>
-            <button className='bg-main-orange px-20 py-[8px] rounded-sm text-white'>
-              Mua lại
-            </button>
-          </div>
-          {/* Contact Seller */}
-          <div className='flex justify-end items-center bg-orange-50 w-full py-4 px-4'>
-            <button className=' w-[212px] py-[8px] rounded-sm bg-white border'>
-              Liên Hệ Người Bán
-            </button>
-          </div>
-          <DeliveryTimeline/>
-          <Summary/>
+        {/* Chi tiết sản phẩm */}
+        <h2 className="font-semibold mb-2">Sản phẩm</h2>
+        <ul className="space-y-3">
+          {order.orderDetails.map((item, idx) => (
+            <li key={idx} className="flex justify-between items-center border-b pb-2">
+              <div>{item.product?.name || "Sản phẩm không xác định"} x {item.quantity}</div>
+              <div>{item.unit_price.toLocaleString()} đ</div>
+            </li>
+          ))}
+        </ul>
+
+        {/* Tổng tiền */}
+        <div className="mt-4 font-semibold">
+          Tổng tiền: <span className="text-[#f53d2d]">{order.total_amount.toLocaleString()} đ</span>
+        </div>
+
+        {/* Địa chỉ giao hàng */}
+        <div className="mt-4">
+          <h2 className="font-semibold mb-1">Địa chỉ giao hàng</h2>
+          <div className="text-gray-600">{order.shipping_address}</div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default OrderDetail
+export default OrderDetail;
