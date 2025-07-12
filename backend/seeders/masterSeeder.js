@@ -491,41 +491,41 @@ const seedMongoDBData = async () => {
     ];
 
     // Insert products
-    await Product.insertMany(products);
+    const insertedProducts = await Product.insertMany(products);
     console.log("✅ Products seeded");
 
-    // Create sample reviews
+    // Create sample reviews using the actual product IDs
     const reviews = [
       {
-        product_id: 1001,
+        product_id: insertedProducts[0]._id, // iPhone 15 Pro Max
         user_id: 1,
         rating: 5,
         comment: "Excellent product! Highly recommend.",
         created_at: new Date(),
       },
       {
-        product_id: 1001,
+        product_id: insertedProducts[0]._id, // iPhone 15 Pro Max
         user_id: 2,
         rating: 4,
         comment: "Good quality, fast delivery.",
         created_at: new Date(),
       },
       {
-        product_id: 1002,
+        product_id: insertedProducts[1]._id, // Samsung Galaxy S24 Ultra
         user_id: 3,
         rating: 5,
         comment: "Amazing camera quality!",
         created_at: new Date(),
       },
       {
-        product_id: 1003,
+        product_id: insertedProducts[2]._id, // MacBook Pro 14-inch M3
         user_id: 1,
         rating: 5,
         comment: "Perfect for work and creative tasks.",
         created_at: new Date(),
       },
       {
-        product_id: 1004,
+        product_id: insertedProducts[3]._id, // AirPods Pro 2nd generation
         user_id: 2,
         rating: 4,
         comment: "Great sound quality, comfortable fit.",
@@ -536,12 +536,12 @@ const seedMongoDBData = async () => {
     await Review.insertMany(reviews);
     console.log("✅ Reviews seeded");
 
-    // Create sample cart for test user
+    // Create sample cart for test user using actual product IDs
     const sampleCart = {
       user_id: 1,
       products: [
         {
-          product_id: 1001,
+          product_id: insertedProducts[0]._id, // iPhone 15 Pro Max
           quantity: 1,
           variant: {
             size: "256GB",
@@ -550,7 +550,7 @@ const seedMongoDBData = async () => {
           added_at: new Date(),
         },
         {
-          product_id: 1004,
+          product_id: insertedProducts[3]._id, // AirPods Pro 2nd generation
           quantity: 2,
           variant: {
             size: "One Size",

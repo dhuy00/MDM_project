@@ -33,7 +33,7 @@ exports.getCart = async (req, res) => {
         _id: cart._id,
         user_id: cart.user_id,
         products: cart.products.map((item) => {
-          const productDetail = products.find((p) => p._id === item.product_id);
+          const productDetail = products.find((p) => p._id.toString() === item.product_id.toString());
           return {
             product_id: item.product_id,
             quantity: item.quantity,
@@ -97,7 +97,7 @@ exports.addToCart = async (req, res) => {
     } else {
       // Nếu sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng
       const existingProductIndex = cart.products.findIndex(
-        (item) => item.product_id === product_id
+        (item) => item.product_id.toString() === product_id.toString()
       );
 
       if (existingProductIndex >= 0) {
@@ -139,7 +139,7 @@ exports.updateCartItem = async (req, res) => {
 
     // Tìm sản phẩm trong giỏ hàng
     const productIndex = cart.products.findIndex(
-      (item) => item.product_id === product_id
+      (item) => item.product_id.toString() === product_id.toString()
     );
 
     if (productIndex === -1) {
@@ -188,7 +188,7 @@ exports.removeFromCart = async (req, res) => {
 
     // Xóa sản phẩm khỏi giỏ hàng
     const productIndex = cart.products.findIndex(
-      (item) => item.product_id === product_id
+      (item) => item.product_id.toString() === product_id.toString()
     );
 
     if (productIndex === -1) {

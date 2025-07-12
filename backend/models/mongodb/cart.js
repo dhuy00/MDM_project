@@ -8,7 +8,7 @@ if (mongoose.connection.readyState === 0) {
 
 const CartProductSchema = new mongoose.Schema(
   {
-    product_id: { type: Number, required: true },
+    product_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
     quantity: { type: Number, required: true },
     variant: {
       type: Object,

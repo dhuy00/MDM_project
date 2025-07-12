@@ -23,9 +23,11 @@ exports.placeOrder = async (req, res) => {
   console.log("Order request body:", req.body);
   console.log("Address:", address);
   console.log("Shipping address:", shipping_address);
+  console.log("Selected products:", selected_products);
 
   // Kiểm tra địa chỉ giao hàng
   const finalAddress = address || shipping_address;
+  console.log("Final address:", finalAddress);
   if (!finalAddress || finalAddress.trim() === "") {
     return res.status(400).json({
       message: "Địa chỉ giao hàng là bắt buộc!",
@@ -45,7 +47,7 @@ exports.placeOrder = async (req, res) => {
     if (selected_products && selected_products.length > 0) {
       // Nếu có chỉ định sản phẩm được chọn, chỉ lấy các sản phẩm đó
       productsToOrder = cart.products.filter((item) =>
-        selected_products.includes(item.product_id)
+        selected_products.includes(item.product_id.toString())
       );
     }
 
@@ -57,7 +59,10 @@ exports.placeOrder = async (req, res) => {
 
     // Lấy thông tin sản phẩm từ MongoDB
     const productIds = productsToOrder.map((p) => p.product_id);
+    console.log("Product IDs to order:", productIds);
     const products = await Product.find({ _id: { $in: productIds } });
+    console.log("Products found:", products.length);
+    console.log("Products found IDs:", products.map(p => p._id.toString()));
 
     // Tính tổng tiền và chi tiết đơn hàng
     let total_amount = 0;
@@ -65,7 +70,8 @@ exports.placeOrder = async (req, res) => {
     const orderDetails = [];
 
     for (const item of productsToOrder) {
-      const prod = products.find((p) => p._id === item.product_id);
+      const prod = products.find((p) => p._id.toString() === item.product_id.toString());
+      console.log(`Looking for product ${item.product_id}, found:`, prod ? prod.name : "NOT FOUND");
       if (!prod) continue;
 
       // Kiểm tra tồn kho
@@ -146,8 +152,14 @@ exports.placeOrder = async (req, res) => {
       // Nếu chỉ đặt một phần sản phẩm từ giỏ hàng, cập nhật giỏ hàng
       if (selected_products && selected_products.length > 0) {
         const remainingProducts = cart.products.filter(
-          (item) => !selected_products.includes(item.product_id)
+          (item) => !selected_products.includes(item.product_id.toString())
         );
+
+        console.log("Original cart products:", cart.products.length);
+        console.log("Selected products:", selected_products);
+        console.log("Remaining products:", remainingProducts.length);
+        console.log("Cart products IDs:", cart.products.map(p => p.product_id.toString()));
+        console.log("Selected products IDs:", selected_products);
 
         await Cart.updateOne(
           { user_id },
@@ -219,7 +231,7 @@ exports.getOrderDetail = async (req, res) => {
     // Map thông tin sản phẩm với chi tiết đơn hàng
     const orderDetailsWithProducts = order.orderDetails.map((detail) => {
       const productInfo =
-        products.find((p) => p._id === detail.product_id) || {};
+        products.find((p) => p._id.toString() === detail.product_id.toString()) || {};
       return {
         ...detail.toJSON(),
         product: {
@@ -324,7 +336,7 @@ exports.reorder = async (req, res) => {
     const products = await Product.find({ _id: { $in: productIds } });
 
     for (const detail of originalOrder.orderDetails) {
-      const product = products.find((p) => p._id === detail.product_id);
+      const product = products.find((p) => p._id.toString() === detail.product_id.toString());
       if (!product) {
         return res.status(400).json({
           message: `Sản phẩm ID ${detail.product_id} không còn tồn tại!`,

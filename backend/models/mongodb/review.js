@@ -8,7 +8,7 @@ if (mongoose.connection.readyState === 0) {
 
 const ReviewSchema = new mongoose.Schema({
   user_id: { type: Number, required: true },
-  product_id: { type: Number, required: true },
+  product_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Product' },
   order_id: { type: Number, required: false }, // Made optional since orders are in MySQL
   rating: { type: Number, required: true },
   comment: String,

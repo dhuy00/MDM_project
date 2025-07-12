@@ -184,7 +184,7 @@ const CartPage = () => {
 
     return cart.products
       .filter((item) => selectedProducts.includes(item.product_id))
-      .reduce((sum, item) => sum + item.quantity * item.details.price, 0);
+      .reduce((sum, item) => sum + item.quantity * (item.details.price || 0), 0);
   };
 
   // Tính phí vận chuyển
@@ -515,7 +515,7 @@ const CartPage = () => {
                 </div>
 
                 <div className="col-span-2 text-center text-gray-500">
-                  ₫{item.details.price.toLocaleString()}
+                  ₫{item.details.price ? item.details.price.toLocaleString() : "N/A"}
                 </div>
 
                 <div className="col-span-2 flex items-center justify-center">
@@ -551,7 +551,7 @@ const CartPage = () => {
                 </div>
 
                 <div className="col-span-1 text-center text-[#f53d2d] font-medium">
-                  ₫{(item.details.price * item.quantity).toLocaleString()}
+                  ₫{((item.details.price || 0) * item.quantity).toLocaleString()}
                 </div>
 
                 <div className="col-span-1 text-center">
@@ -717,7 +717,7 @@ const CartPage = () => {
                   </div>
 
                   <div className="col-span-6 text-right text-[#f53d2d] font-medium">
-                    ₫{(item.details.price * item.quantity).toLocaleString()}
+                    ₫{((item.details.price || 0) * item.quantity).toLocaleString()}
                   </div>
                 </div>
               ))}
