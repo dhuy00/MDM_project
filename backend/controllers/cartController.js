@@ -175,6 +175,9 @@ exports.removeFromCart = async (req, res) => {
   const user_id = req.user.userId;
   const { product_id } = req.body;
 
+  console.log("removeFromCart called with user_id:", user_id);
+  console.log("removeFromCart called with product_id:", product_id);
+
   if (!product_id) {
     return res.status(400).json({ message: "Thiếu thông tin sản phẩm" });
   }
@@ -186,10 +189,15 @@ exports.removeFromCart = async (req, res) => {
       return res.status(404).json({ message: "Giỏ hàng không tồn tại" });
     }
 
+    console.log("Cart before removal:", cart.products.length, "products");
+    console.log("Cart products:", cart.products.map(p => p.product_id.toString()));
+
     // Xóa sản phẩm khỏi giỏ hàng
     const productIndex = cart.products.findIndex(
       (item) => item.product_id.toString() === product_id.toString()
     );
+
+    console.log("Product index to remove:", productIndex);
 
     if (productIndex === -1) {
       return res
@@ -200,6 +208,8 @@ exports.removeFromCart = async (req, res) => {
     cart.products.splice(productIndex, 1);
     cart.last_updated = Date.now();
     await cart.save();
+
+    console.log("Cart after removal:", cart.products.length, "products");
 
     res.json({
       message: "Đã xóa sản phẩm khỏi giỏ hàng",
