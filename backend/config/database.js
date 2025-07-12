@@ -6,7 +6,7 @@ const { Sequelize } = require("sequelize");
 // Database configuration
 const sequelize = new Sequelize({
   database: process.env.MYSQL_DATABASE || "shopee_clone",
-  username: process.env.MYSQL_USERNAME || "root",
+  username: process.env.MYSQL_USER || "root",
   password: process.env.MYSQL_PASSWORD || "",
   host: process.env.MYSQL_HOST || "localhost",
   port: process.env.MYSQL_PORT || 3306,

@@ -17,6 +17,16 @@ const customerRoutes = [
     role: "public",
   },
   {
+    path: "/login",
+    element: <Login />,
+    role: "public",
+  },
+  {
+    path: "/register",
+    element: <Register />,
+    role: "public",
+  },
+  {
     path: "/product/:id",
     element: <Product />,
     role: "public",
@@ -47,16 +57,6 @@ const customerRoutes = [
       </ProtectedRoute>
     ),
     role: "protected",
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    role: "public",
-  },
-  {
-    path: "/register",
-    element: <Register />,
-    role: "public",
   },
   {
     path: "/cart-simple",
