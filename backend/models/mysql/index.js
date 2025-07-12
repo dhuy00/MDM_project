@@ -14,8 +14,8 @@ const defineAssociations = () => {
   Rank.hasMany(User, { foreignKey: "rank_id", as: "users" });
 
   // User and Shop associations
-  Shop.belongsTo(User, { foreignKey: "user_id", as: "owner" });
-  User.hasOne(Shop, { foreignKey: "user_id", as: "shop" });
+  Shop.belongsTo(User, { foreignKey: "user_id", as: "User" });
+  User.hasOne(Shop, { foreignKey: "user_id", as: "Shop" });
 
   // User and Order associations
   Order.belongsTo(User, { foreignKey: "user_id", as: "customer" });

@@ -126,6 +126,15 @@ const Register = () => {
               Đăng nhập
             </Link>
           </span>
+          
+          <div className="text-center mt-4">
+            <span className="text-gray-500 text-sm">
+              Bạn là người bán hàng?{" "}
+              <Link to="/seller/register" className="text-main-orange font-medium">
+                Đăng ký bán hàng
+              </Link>
+            </span>
+          </div>
         </form>
       </div>
     </div>

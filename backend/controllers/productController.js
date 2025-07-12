@@ -1,4 +1,5 @@
 const Product = require("../models/mongodb/product");
+const mongoose = require("mongoose");
 
 // Get all products
 exports.getAllProducts = async (req, res) => {
@@ -11,10 +12,28 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
+// Get featured products
+exports.getFeaturedProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ isFeatured: true });
+    res.status(200).json(products);
+  } catch (error) {
+    console.error("Error fetching featured products:", error);
+    res.status(500).json({ message: "Failed to fetch featured products" });
+  }
+};
+
 // Get a product by ID
 exports.getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(parseInt(req.params.id));
+    const { id } = req.params;
+
+    // Validate if the ID is a valid MongoDB ObjectId
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const product = await Product.findById(id);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -30,7 +49,14 @@ exports.getProductById = async (req, res) => {
 // Get similar products based on category, brand, or tags
 exports.getSimilarProducts = async (req, res) => {
   try {
-    const product = await Product.findById(parseInt(req.params.id));
+    const { id } = req.params;
+
+    // Validate if the ID is a valid MongoDB ObjectId
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid product ID" });
+    }
+
+    const product = await Product.findById(id);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });

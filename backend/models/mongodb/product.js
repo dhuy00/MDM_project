@@ -7,10 +7,11 @@ if (mongoose.connection.readyState === 0) {
 }
 
 const ProductSchema = new mongoose.Schema({
-  _id: Number,
   name: { type: String, required: true },
+  description: { type: String, required: true },
   category: String,
   brand: String,
+  shop_id: { type: Number, required: true },
   specifications: {
     sleeveLength: String,
     manufacturer: String,
@@ -20,17 +21,28 @@ const ProductSchema = new mongoose.Schema({
     Size: [String],
     Màu: [String],
   },
-  price: Number,
-  stock: Number,
-  rating: Number,
-  views: Number,
-  sales: Number,
-  isFeatured: Boolean,
-  status: String,
+  colors: [String],
+  variations: [String],
+  price: { type: Number, required: true },
+  stock: { type: Number, default: 0 },
+  rating: { type: Number, default: 0 },
+  views: { type: Number, default: 0 },
+  sales: { type: Number, default: 0 },
+  isFeatured: { type: Boolean, default: false },
+  status: { type: String, default: "active" },
   images: [String],
   thumbnail: String,
   videoUrl: String,
   tags: [String],
+  shipping_fee: { type: Number, default: 0 },
+  reviews: [
+    {
+      user_id: Number,
+      rating: Number,
+      comment: String,
+      created_at: { type: Date, default: Date.now },
+    },
+  ],
   shipping: {
     weight: String,
     dimensions: String,
@@ -42,7 +54,8 @@ const ProductSchema = new mongoose.Schema({
       },
     ],
   },
-  createdAt: { type: Date, default: Date.now },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Product", ProductSchema);

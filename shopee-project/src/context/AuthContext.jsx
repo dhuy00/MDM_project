@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
 
   // Kiểm tra xem user đã đăng nhập hay chưa khi load trang
   useEffect(() => {
+    console.log("AuthContext checkAuth called with token:", !!token); // Debug log
     const checkAuth = async () => {
       if (!token) {
         setLoading(false);
@@ -38,11 +39,15 @@ export const AuthProvider = ({ children }) => {
         if (response.data.authenticated) {
           setCurrentUser(response.data.user);
         } else {
-          logout();
+          // Clear token without calling logout to avoid infinite loop
+          setToken(null);
+          setCurrentUser(null);
         }
       } catch (error) {
         console.error("Error checking auth:", error);
-        logout();
+        // Clear token without calling logout to avoid infinite loop
+        setToken(null);
+        setCurrentUser(null);
       }
 
       setLoading(false);
@@ -55,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const response = await axios.post(`${API_URL}/login`, {
-        username,
+        phone: username, // Backend expects 'phone' field
         password,
       });
 

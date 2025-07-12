@@ -7,7 +7,7 @@ const sequelize = require("../config/database");
 // Đặt hàng mới
 exports.placeOrder = async (req, res) => {
   // Lấy user_id từ user đã xác thực qua middleware
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
 
   const {
     payment_method,
@@ -179,7 +179,7 @@ exports.placeOrder = async (req, res) => {
 // Lấy danh sách đơn hàng của user
 exports.getOrdersByUser = async (req, res) => {
   // Lấy user_id từ user đã xác thực qua middleware
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
   try {
     const orders = await Order.findAll({
       where: { user_id },
@@ -195,7 +195,7 @@ exports.getOrdersByUser = async (req, res) => {
 exports.getOrderDetail = async (req, res) => {
   const { order_id } = req.params;
   // Lấy user_id từ user đã xác thực qua middleware
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
 
   try {
     // Thêm điều kiện user_id để đảm bảo người dùng chỉ xem được đơn hàng của họ
@@ -246,7 +246,7 @@ exports.getOrderDetail = async (req, res) => {
 // Hủy đơn hàng
 exports.cancelOrder = async (req, res) => {
   const { order_id } = req.params;
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
 
   try {
     // Tìm đơn hàng và kiểm tra quyền sở hữu
@@ -299,7 +299,7 @@ exports.cancelOrder = async (req, res) => {
 // Đặt lại đơn hàng
 exports.reorder = async (req, res) => {
   const { order_id } = req.params;
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
 
   try {
     // Tìm đơn hàng gốc

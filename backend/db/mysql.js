@@ -11,14 +11,16 @@ console.log("MYSQL_USER:", process.env.MYSQL_USER);
 console.log("MYSQL_PASSWORD set:", !!process.env.MYSQL_PASSWORD);
 console.log("MYSQL_DATABASE:", process.env.MYSQL_DATABASE);
 
-const pool = mysql.createPool({
+// Create connection config without any password
+const config = {
   host: process.env.MYSQL_HOST || "localhost",
   user: process.env.MYSQL_USER || "root",
-  password: process.env.MYSQL_PASSWORD || "khoi123z",
-  database: process.env.MYSQL_DATABASE || "shopee_clone",
+  database: process.env.MYSQL_DATABASE || "user_db",
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0,
-});
+  queueLimit: 0
+};
+
+const pool = mysql.createPool(config);
 
 module.exports = pool;

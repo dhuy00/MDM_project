@@ -3,6 +3,16 @@ const router = express.Router();
 const cartController = require("../controllers/cartController");
 const authenticate = require("../middleware/authMiddleware");
 
+// Test endpoint to check authentication
+router.get("/test-auth", authenticate, (req, res) => {
+  console.log("Test auth endpoint - req.user:", req.user);
+  res.json({ 
+    message: "Authentication working", 
+    user: req.user,
+    userId: req.user ? req.user.userId : "undefined" 
+  });
+});
+
 // Lấy giỏ hàng của user (đã đăng nhập)
 router.get("/", authenticate, cartController.getCart);
 

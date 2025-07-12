@@ -3,8 +3,18 @@ const Product = require("../models/mongodb/product");
 
 // Lấy giỏ hàng của user
 exports.getCart = async (req, res) => {
+  // Debug: log req.user để xem thông tin user
+  console.log("Debug - req.user:", req.user);
+  console.log("Debug - req.user.userId:", req.user ? req.user.userId : "undefined");
+  
   // Lấy user_id từ user đã xác thực qua middleware
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
+  
+  // Safety check
+  if (!user_id) {
+    console.error("User ID is undefined in getCart");
+    return res.status(401).json({ message: "User not authenticated properly" });
+  }
   try {
     let cart = await Cart.findOne({ user_id });
 
@@ -45,8 +55,18 @@ exports.getCart = async (req, res) => {
 
 // Thêm sản phẩm vào giỏ hàng
 exports.addToCart = async (req, res) => {
+  // Debug: log req.user để xem thông tin user
+  console.log("Debug - req.user:", req.user);
+  console.log("Debug - req.user.userId:", req.user ? req.user.userId : "undefined");
+  
   // Lấy user_id từ user đã xác thực qua middleware
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
+  
+  // Safety check
+  if (!user_id) {
+    console.error("User ID is undefined in addToCart");
+    return res.status(401).json({ message: "User not authenticated properly" });
+  }
   const { product_id, quantity, variant } = req.body;
 
   if (!product_id || !quantity) {
@@ -103,7 +123,7 @@ exports.addToCart = async (req, res) => {
 // Cập nhật số lượng sản phẩm trong giỏ hàng
 exports.updateCartItem = async (req, res) => {
   // Lấy user_id từ user đã xác thực qua middleware
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
   const { product_id, quantity } = req.body;
 
   if (!product_id || quantity === undefined) {
@@ -152,7 +172,7 @@ exports.updateCartItem = async (req, res) => {
 // Xóa sản phẩm khỏi giỏ hàng
 exports.removeFromCart = async (req, res) => {
   // Lấy user_id từ user đã xác thực qua middleware
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
   const { product_id } = req.body;
 
   if (!product_id) {

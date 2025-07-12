@@ -159,8 +159,8 @@ const seedMongoDBData = async () => {
     // Enhanced product data
     const products = [
       {
-        _id: 1001,
         name: "iPhone 15 Pro Max",
+        description: "The most advanced iPhone ever with A17 Pro chip, titanium design, and professional camera system",
         category: "Electronics",
         brand: "Apple",
         specifications: {
@@ -184,6 +184,7 @@ const seedMongoDBData = async () => {
         sales: 234,
         isFeatured: true,
         status: "active",
+        shop_id: 1,
         images: [
           "https://via.placeholder.com/300x300?text=iPhone+15+Pro+Max",
           "https://via.placeholder.com/300x300?text=iPhone+15+Pro+Max+2",
@@ -203,8 +204,8 @@ const seedMongoDBData = async () => {
         createdAt: new Date(),
       },
       {
-        _id: 1002,
         name: "Samsung Galaxy S24 Ultra",
+        description: "Ultimate productivity powerhouse with S Pen, advanced AI features, and stunning 200MP camera",
         category: "Electronics",
         brand: "Samsung",
         specifications: {
@@ -228,6 +229,7 @@ const seedMongoDBData = async () => {
         sales: 189,
         isFeatured: true,
         status: "active",
+        shop_id: 2,
         images: [
           "https://via.placeholder.com/300x300?text=Galaxy+S24+Ultra",
           "https://via.placeholder.com/300x300?text=Galaxy+S24+Ultra+2",
@@ -247,8 +249,8 @@ const seedMongoDBData = async () => {
         createdAt: new Date(),
       },
       {
-        _id: 1003,
         name: "MacBook Pro 14-inch M3",
+        description: "Professional laptop with M3 chip, brilliant Liquid Retina XDR display, and all-day battery life",
         category: "Electronics",
         brand: "Apple",
         specifications: {
@@ -267,6 +269,7 @@ const seedMongoDBData = async () => {
         sales: 67,
         isFeatured: true,
         status: "active",
+        shop_id: 1,
         images: [
           "https://via.placeholder.com/300x300?text=MacBook+Pro+14",
           "https://via.placeholder.com/300x300?text=MacBook+Pro+14+2",
@@ -286,8 +289,8 @@ const seedMongoDBData = async () => {
         createdAt: new Date(),
       },
       {
-        _id: 1004,
         name: "AirPods Pro 2nd generation",
+        description: "Advanced wireless earbuds with active noise cancellation, spatial audio, and adaptive transparency",
         category: "Electronics",
         brand: "Apple",
         specifications: {
@@ -306,6 +309,7 @@ const seedMongoDBData = async () => {
         sales: 156,
         isFeatured: false,
         status: "active",
+        shop_id: 1,
         images: [
           "https://via.placeholder.com/300x300?text=AirPods+Pro+2",
           "https://via.placeholder.com/300x300?text=AirPods+Pro+2+Case",
@@ -325,8 +329,8 @@ const seedMongoDBData = async () => {
         createdAt: new Date(),
       },
       {
-        _id: 1005,
         name: "Sony WH-1000XM5",
+        description: "Industry-leading noise canceling headphones with premium sound quality and 30-hour battery life",
         category: "Electronics",
         brand: "Sony",
         specifications: {
@@ -345,6 +349,7 @@ const seedMongoDBData = async () => {
         sales: 89,
         isFeatured: false,
         status: "active",
+        shop_id: 2,
         images: [
           "https://via.placeholder.com/300x300?text=Sony+WH-1000XM5",
           "https://via.placeholder.com/300x300?text=Sony+WH-1000XM5+2",
@@ -364,8 +369,8 @@ const seedMongoDBData = async () => {
         createdAt: new Date(),
       },
       {
-        _id: 1006,
         name: "Uniqlo Áo Thun Nam Cotton",
+        description: "Essential men's cotton t-shirt with comfortable fit, breathable fabric, and modern design",
         category: "Fashion",
         brand: "Uniqlo",
         specifications: {
@@ -384,6 +389,7 @@ const seedMongoDBData = async () => {
         sales: 345,
         isFeatured: false,
         status: "active",
+        shop_id: 2,
         images: [
           "https://via.placeholder.com/300x300?text=Uniqlo+T-Shirt",
           "https://via.placeholder.com/300x300?text=Uniqlo+T-Shirt+Colors",
@@ -403,8 +409,8 @@ const seedMongoDBData = async () => {
         createdAt: new Date(),
       },
       {
-        _id: 1007,
         name: "Nike Air Max 270",
+        description: "Iconic lifestyle sneakers with Max Air cushioning, breathable mesh upper, and street-ready style",
         category: "Fashion",
         brand: "Nike",
         specifications: {
@@ -423,6 +429,7 @@ const seedMongoDBData = async () => {
         sales: 127,
         isFeatured: true,
         status: "active",
+        shop_id: 2,
         images: [
           "https://via.placeholder.com/300x300?text=Nike+Air+Max+270",
           "https://via.placeholder.com/300x300?text=Nike+Air+Max+270+2",
@@ -442,8 +449,8 @@ const seedMongoDBData = async () => {
         createdAt: new Date(),
       },
       {
-        _id: 1008,
         name: "L'Oréal Revitalift Serum",
+        description: "Anti-aging serum with hyaluronic acid and vitamin C for smoother, more radiant skin",
         category: "Beauty",
         brand: "L'Oréal",
         specifications: {
@@ -462,6 +469,7 @@ const seedMongoDBData = async () => {
         sales: 234,
         isFeatured: false,
         status: "active",
+        shop_id: 1,
         images: [
           "https://via.placeholder.com/300x300?text=L'Oreal+Serum",
           "https://via.placeholder.com/300x300?text=L'Oreal+Serum+2",

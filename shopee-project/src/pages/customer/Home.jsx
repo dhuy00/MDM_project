@@ -16,6 +16,7 @@ const Home = () => {
   const API_URL = "http://localhost:5000/api";
 
   useEffect(() => {
+    console.log("Home fetchProducts called"); // Debug log
     const fetchProducts = async () => {
       setLoading(true);
       try {
@@ -25,27 +26,40 @@ const Home = () => {
         });
 
         // Add discount information for flash sale products
-        const featuredWithDiscount = featuredResponse.data.map((product) => ({
-          ...product,
-          id: product._id,
-          image: product.thumbnail || product.images[0],
-          discount: Math.floor(Math.random() * 30) + 20, // 20-50% discount
-          originalPrice: Math.round(
-            product.price * (1 + (Math.random() * 0.5 + 0.2))
-          ), // 20-70% higher
-        }));
+        const featuredWithDiscount = (featuredResponse.data || []).map((product) => {
+          console.log("Flash sale product:", product); // Debug log
+          console.log("Product _id:", product._id); // Debug log
+          console.log("Product _id type:", typeof product._id); // Debug log
+          return {
+            ...product,
+            id: product._id ? product._id.toString() : product.id,
+            image: product.thumbnail || product.images?.[0] || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23f5f5f5'/%3E%3Ctext x='90' y='90' font-family='Arial' font-size='14' fill='%23999' text-anchor='middle' dy='0.3em'%3ENo Image%3C/text%3E%3C/svg%3E",
+            discount: Math.floor(Math.random() * 30) + 20, // 20-50% discount
+            originalPrice: Math.round(
+              product.price * (1 + (Math.random() * 0.5 + 0.2))
+            ), // 20-70% higher
+          };
+        });
+        console.log("Featured with discount:", featuredWithDiscount); // Debug log
         setFlashSaleProducts(featuredWithDiscount);
 
         // Fetch recommended products
         const recommendedResponse = await axios.get(`${API_URL}/products`);
-        const recommendedWithDetails = recommendedResponse.data.map(
-          (product) => ({
-            ...product,
-            id: product._id,
-            image: product.thumbnail || product.images[0],
-            sold: product.sales || Math.floor(Math.random() * 1000),
-          })
+        console.log("Recommended response:", recommendedResponse.data); // Debug log
+        const recommendedWithDetails = (recommendedResponse.data || []).map(
+          (product) => {
+            console.log("Recommended product:", product); // Debug log
+            console.log("Product _id:", product._id); // Debug log
+            console.log("Product _id type:", typeof product._id); // Debug log
+            return {
+              ...product,
+              id: product._id ? product._id.toString() : product.id,
+              image: product.thumbnail || product.images?.[0] || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23f5f5f5'/%3E%3Ctext x='90' y='90' font-family='Arial' font-size='14' fill='%23999' text-anchor='middle' dy='0.3em'%3ENo Image%3C/text%3E%3C/svg%3E",
+              sold: product.sales || Math.floor(Math.random() * 1000),
+            };
+          }
         );
+        console.log("Recommended with details:", recommendedWithDetails); // Debug log
         setRecommendedProducts(recommendedWithDetails);
       } catch (err) {
         console.error("Failed to fetch products:", err);
@@ -162,8 +176,7 @@ const Home = () => {
                       className="w-full h-[180px] object-cover"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src =
-                          "https://via.placeholder.com/180?text=Image+Not+Found";
+                        e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23f5f5f5'/%3E%3Ctext x='90' y='90' font-family='Arial' font-size='14' fill='%23999' text-anchor='middle' dy='0.3em'%3ENo Image%3C/text%3E%3C/svg%3E";
                       }}
                     />
                     <div className="absolute top-0 right-0 bg-[#f53d2d] text-white text-xs px-1 py-0.5">
@@ -225,8 +238,7 @@ const Home = () => {
                       className="w-full h-[180px] object-cover"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src =
-                          "https://via.placeholder.com/180?text=Image+Not+Found";
+                        e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23f5f5f5'/%3E%3Ctext x='90' y='90' font-family='Arial' font-size='14' fill='%23999' text-anchor='middle' dy='0.3em'%3ENo Image%3C/text%3E%3C/svg%3E";
                       }}
                     />
                   </div>

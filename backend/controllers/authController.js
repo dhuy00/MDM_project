@@ -39,11 +39,14 @@ class AuthController {
   login = async (req, res) => {
     try {
       const { phone, password } = req.body;
+      console.log("Login attempt for phone:", phone);
 
       const [users] = await db.query(
         'SELECT * FROM users WHERE phone = ? AND status = "active"',
         [phone]
       );
+      console.log("Users found:", users.length);
+      
       if (users.length === 0) {
         return res
           .status(400)
@@ -51,7 +54,11 @@ class AuthController {
       }
 
       const user = users[0];
+      console.log("User found:", { user_id: user.user_id, phone: user.phone, role: user.role });
+      
       const isMatch = await bcrypt.compare(password, user.password);
+      console.log("Password match:", isMatch);
+      
       if (!isMatch) {
         return res
           .status(400)
@@ -63,10 +70,15 @@ class AuthController {
         process.env.JWT_SECRET || "secret_key",
         { expiresIn: "7d" }
       );
+      
+      console.log("Token created:", token.substring(0, 20) + "...");
+      console.log("Token payload:", { userId: user.user_id, phone: user.phone, role: user.role });
 
       await redisClient.set(`session:${user.user_id}`, token, {
         EX: 7 * 24 * 60 * 60,
       });
+      
+      console.log("Token saved to Redis for user:", user.user_id);
 
       res.json({
         success: true,

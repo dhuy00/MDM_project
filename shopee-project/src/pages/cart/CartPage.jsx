@@ -40,6 +40,7 @@ const CartPage = () => {
   }, [currentUser, navigate]);
 
   const fetchCart = useCallback(async () => {
+    console.log("fetchCart called"); // Debug log
     if (!currentUser) return;
 
     setLoading(true);
@@ -52,31 +53,33 @@ const CartPage = () => {
       });
       setCart(response.data);
 
-      // Mặc định chọn tất cả sản phẩm, hoặc sản phẩm vừa thêm nếu đến từ trang chi tiết
-      const productsToSelect = location.state?.justAdded
-        ? [location.state.justAdded]
-        : response.data.products.map((p) => p.product_id);
-
+      // Mặc định chọn tất cả sản phẩm
+      const productsToSelect = response.data.products.map((p) => p.product_id);
       setSelectedProducts(productsToSelect);
 
-      // Nếu đến từ trang chi tiết và có sản phẩm vừa thêm, tự động tiến hành đặt hàng
-      if (location.state?.justAdded) {
-        setTimeout(() => {
-          setStep(2); // Chuyển sang bước điền thông tin đặt hàng
-        }, 500);
-      }
     } catch (error) {
       console.error("Lỗi khi lấy giỏ hàng:", error);
       setError("Không thể tải giỏ hàng. Vui lòng thử lại sau!");
     } finally {
       setLoading(false);
     }
-  }, [currentUser, location.state]);
+  }, [currentUser]);
 
-  // Sử dụng fetchCart khi component mount hoặc khi location.state thay đổi
+  // Sử dụng fetchCart khi component mount
   useEffect(() => {
     fetchCart();
   }, [fetchCart]);
+
+  // Handle location state separately to avoid infinite re-fetching
+  useEffect(() => {
+    if (location.state?.justAdded && cart?.products) {
+      // If coming from product detail with just added product
+      setSelectedProducts([location.state.justAdded]);
+      setTimeout(() => {
+        setStep(2); // Go to order info step
+      }, 500);
+    }
+  }, [location.state?.justAdded, cart?.products]);
 
   const handleSelectProduct = (product_id) => {
     if (selectedProducts.includes(product_id)) {
@@ -480,7 +483,7 @@ const CartPage = () => {
                 <div className="col-span-5 flex items-center">
                   <div className="w-16 h-16 flex-shrink-0 mr-3">
                     <img
-                      src={item.details.thumbnail || "placeholder.jpg"}
+                      src={item.details.thumbnail || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f5f5f5'/%3E%3Ctext x='40' y='40' font-family='Arial' font-size='12' fill='%23999' text-anchor='middle' dy='0.3em'%3ENo Image%3C/text%3E%3C/svg%3E"}
                       alt={item.details.name}
                       className="w-full h-full object-cover border"
                     />
@@ -691,7 +694,7 @@ const CartPage = () => {
                   <div className="col-span-6 flex items-center">
                     <div className="w-12 h-12 flex-shrink-0 mr-3">
                       <img
-                        src={item.details.thumbnail || "placeholder.jpg"}
+                        src={item.details.thumbnail || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f5f5f5'/%3E%3Ctext x='40' y='40' font-family='Arial' font-size='12' fill='%23999' text-anchor='middle' dy='0.3em'%3ENo Image%3C/text%3E%3C/svg%3E"}
                         alt={item.details.name}
                         className="w-full h-full object-cover border"
                       />

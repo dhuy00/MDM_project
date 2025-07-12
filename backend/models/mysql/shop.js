@@ -52,4 +52,12 @@ const Shop = sequelize.define(
   }
 );
 
+// Define associations
+Shop.associate = (models) => {
+  Shop.belongsTo(models.User, {
+    foreignKey: "user_id",
+    as: "User",
+  });
+};
+
 module.exports = Shop;

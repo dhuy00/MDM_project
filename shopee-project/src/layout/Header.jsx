@@ -53,7 +53,7 @@ const Header = () => {
       <div className="bg-[#f53d2d] text-white py-1">
         <div className="container mx-auto flex justify-between items-center px-4">
           <div className="flex space-x-4 text-xs">
-            <Link to="/seller-center" className="hover:opacity-80">
+            <Link to="/seller/login" className="hover:opacity-80">
               Seller Center
             </Link>
             <span>|</span>

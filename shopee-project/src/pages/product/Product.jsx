@@ -35,6 +35,21 @@ const Product = () => {
   // Fetch product data
   useEffect(() => {
     const fetchProductData = async () => {
+      // Check if ID is valid
+      if (!id) {
+        setError("Product ID is missing");
+        setIsLoadingProduct(false);
+        return;
+      }
+
+      // Basic validation for MongoDB ObjectId format (24 hex characters)
+      const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+      if (!objectIdRegex.test(id)) {
+        setError("Invalid product ID format");
+        setIsLoadingProduct(false);
+        return;
+      }
+
       setIsLoadingProduct(true);
       try {
         const response = await axios.get(`${API_URL}/products/${id}`);
@@ -47,7 +62,13 @@ const Product = () => {
         setSimilarProducts(similarResponse.data);
       } catch (err) {
         console.error("Failed to fetch product data:", err);
-        setError("Failed to load product data");
+        if (err.response?.status === 400) {
+          setError("Invalid product ID");
+        } else if (err.response?.status === 404) {
+          setError("Product not found");
+        } else {
+          setError("Failed to load product data");
+        }
       } finally {
         setIsLoadingProduct(false);
       }
@@ -306,7 +327,7 @@ const Product = () => {
                   src={
                     product.images && product.images.length > 0
                       ? product.images[selectedImage]
-                      : "/images/placeholder.jpg"
+                      : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23f5f5f5'/%3E%3Ctext x='200' y='200' font-family='Arial' font-size='16' fill='%23999' text-anchor='middle' dy='0.3em'%3ENo Image%3C/text%3E%3C/svg%3E"
                   }
                   alt={product.name}
                   className="w-full h-full object-contain"

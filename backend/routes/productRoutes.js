@@ -5,6 +5,9 @@ const productController = require("../controllers/productController");
 // Get all products
 router.get("/", productController.getAllProducts);
 
+// Get featured products
+router.get("/featured", productController.getFeaturedProducts);
+
 // Search products
 router.get("/search", productController.searchProducts);
 

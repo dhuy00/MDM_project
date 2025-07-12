@@ -3,11 +3,15 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const { syncDatabase } = require("./models/mysql");
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 const mongoURI = process.env.MONGODB_URI;
+
+// Initialize MySQL models and associations
+syncDatabase();
 
 // Kết nối MongoDB
 mongoose
@@ -37,6 +41,8 @@ app.use("/api/cart", require("./routes/cartRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/reviews", require("./routes/reviewRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/seller/auth", require("./routes/sellerAuthRoutes"));
+app.use("/api/seller", require("./routes/sellerRoutes"));
 
 app.get("/", (req, res) => res.send("My backend"));
 

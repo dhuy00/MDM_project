@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import shopeeLogo from '../../assets/ShopeeLogo.png';
 import { SiShopee } from "react-icons/si";
 import { toast } from 'react-toastify';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -17,23 +19,16 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: username, password })  
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
+      const result = await login(username, password);
+      
+      if (result.success) {
         toast.success('Đăng nhập thành công!');
-        localStorage.setItem('token', data.token);
         setTimeout(() => {
-          navigate('/home');  
+          navigate('/');  
         }, 1500);
       } else {
-        toast.error(data.message || 'Đăng nhập thất bại.');
-        setError(data.message || 'Đăng nhập thất bại.');
+        toast.error(result.message || 'Đăng nhập thất bại.');
+        setError(result.message || 'Đăng nhập thất bại.');
       }
     } catch (err) {
       toast.error('Lỗi kết nối đến máy chủ.');
@@ -51,7 +46,7 @@ const Login = () => {
           <img src={shopeeLogo} alt='img-logo' className='w-40 object-cover' />
           <span className='text-[1.75rem] font-normal'>Đăng nhập</span>
         </div>
-        <a href='#' className='text-main-orange font-medium'>Bạn cần giúp đỡ?</a>
+        <button className='text-main-orange font-medium'>Bạn cần giúp đỡ?</button>
       </div>
 
       {/* Body */}
@@ -107,10 +102,22 @@ const Login = () => {
           <a href='/forgot-password' className='text-blue-800'>Quên mật khẩu?</a>
 
           <span className='text-center text-gray-500'>
-            Bạn mới biết đến Shopee? <a href='/register' className='text-main-orange font-medium'>
+            Bạn mới biết đến Shopee? <Link to='/register' className='text-main-orange font-medium'>
               Đăng ký
-            </a>
+            </Link>
           </span>
+
+          <div className='border-t pt-4 mt-4'>
+            <span className='text-center text-gray-500 block mb-2'>
+              Dành cho người bán
+            </span>
+            <Link 
+              to='/seller/login' 
+              className='text-center text-blue-600 hover:text-blue-800 font-medium block'
+            >
+              Đăng nhập Seller Center
+            </Link>
+          </div>
         </form>
       </div>
     </div>

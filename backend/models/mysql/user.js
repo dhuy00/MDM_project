@@ -10,7 +10,7 @@ const User = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    username: {
+    full_name: {
       type: DataTypes.STRING(50),
       allowNull: false,
       unique: true,
@@ -47,6 +47,11 @@ const User = sequelize.define(
         key: "rank_id",
       },
     },
+    status: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+      defaultValue: "active",
+    },
     created_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
@@ -63,5 +68,17 @@ const User = sequelize.define(
     updatedAt: "updated_at",
   }
 );
+
+// Define associations
+User.associate = (models) => {
+  User.hasOne(models.Shop, {
+    foreignKey: "user_id",
+    as: "Shop",
+  });
+  User.belongsTo(models.Rank, {
+    foreignKey: "rank_id",
+    as: "Rank",
+  });
+};
 
 module.exports = User;
